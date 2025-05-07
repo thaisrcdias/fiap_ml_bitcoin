@@ -1,7 +1,6 @@
 requests
 fastapi
 fastapi_mcp
-google-adk
 streamlit
 uvicorn
 python-dotenv
