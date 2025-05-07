@@ -1,0 +1,17 @@
+requests
+fastapi
+fastapi_mcp
+google-adk
+streamlit
+uvicorn
+python-dotenv
+pydantic
+tavily-python
+tweepy
+yfinance
+selenium
+boto3
+pyyaml
+pandas
+pyarrow
+numpy
