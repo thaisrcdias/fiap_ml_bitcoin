@@ -9,8 +9,8 @@ parquet_filename = f"df_historico_bitcoin_{pd.Timestamp.now().strftime('%Y-%m-%d
 
 s3 = boto3.client(
     "s3",
-    aws_access_key_id= os.getenv('AKIATBMARLZZGKSWBE6W'), 
-    aws_secret_access_key= os.getenv('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'),
+    aws_access_key_id= os.getenv('AWS_ACCESS_KEY_ID'), 
+    aws_secret_access_key= os.getenv('AWS_SECRET_ACCESS_KEY'),
     region_name="us-east-1"
 )
 
@@ -30,10 +30,10 @@ print(df_hist.dtypes)
 print(df_hist.head(5))
 
 # 5. Ajustar tipos:
-df_hist['open'] = df_hist['open'].astype('float').round(0).astype('Int64')
-df_hist['high'] = df_hist['high'].astype('float').round(0).astype('Int64')
-df_hist['low'] = df_hist['low'].astype('float').round(0).astype('Int64')
-df_hist['close'] = df_hist['close'].astype('float').round(0).astype('Int64')
+df_hist['open'] = df_hist['open'].astype('float').round(2)
+df_hist['high'] = df_hist['high'].astype('float').round(2)
+df_hist['low'] = df_hist['low'].astype('float').round(2)
+df_hist['close'] = df_hist['close'].astype('float').round(2)
 df_hist['volume'] = df_hist['volume'].astype('Int64')
 df_hist['dividends'] = df_hist['dividends'].astype('Int64')
 df_hist['stock_splits'] = df_hist['stock_splits'].astype('Int64')
