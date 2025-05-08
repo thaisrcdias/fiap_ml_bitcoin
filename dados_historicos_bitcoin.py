@@ -9,8 +9,8 @@ parquet_filename = f"df_historico_bitcoin_{pd.Timestamp.now().strftime('%Y-%m-%d
 
 s3 = boto3.client(
     "s3",
-    aws_access_key_id= os.getenv('SECRET_KEY_ID'), 
-    aws_secret_access_key= os.getenv('SECRET_ACCESS_KEY'),
+    aws_access_key_id= os.getenv('AKIATBMARLZZGKSWBE6W'), 
+    aws_secret_access_key= os.getenv('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'),
     region_name="us-east-1"
 )
 
@@ -45,7 +45,7 @@ buffer = BytesIO()
 df_hist.to_parquet(buffer, index=True)
 
 # Caminho no S3 (particionado pela data)
-parquet_path = f"df_historico/bitcoin/{parquet_filename}"
+parquet_path = f"historico/bitcoin/{parquet_filename}"
 buffer.seek(0)
 s3.upload_fileobj(buffer, bucket_name_raw, parquet_path)
 
