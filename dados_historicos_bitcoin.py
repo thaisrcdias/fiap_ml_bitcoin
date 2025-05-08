@@ -9,8 +9,8 @@ parquet_filename = f"df_historico_bitcoin_{pd.Timestamp.now().strftime('%Y-%m-%d
 
 s3 = boto3.client(
     "s3",
-    aws_access_key_id= os.getenv('AWS_ACCESS_KEY_ID'), 
-    aws_secret_access_key= os.getenv('AWS_SECRET_ACCESS_KEY'),
+    aws_access_key_id= os.getenv('ACCESS_KEY_ID'), 
+    aws_secret_access_key= os.getenv('SECRET_ACCESS_KEY'),
     region_name="us-east-1"
 )
 
@@ -38,16 +38,16 @@ df_hist['volume'] = df_hist['volume'].astype('Int64')
 df_hist['dividends'] = df_hist['dividends'].astype('Int64')
 df_hist['stock_splits'] = df_hist['stock_splits'].astype('Int64')
 
-# 6. Ordenar colunas na ordem desejada
-df_hist = df_hist[['date', 'open', 'high', 'low', 'close', 'volume', 'dividends', 'stock_splits']]
+# # 6. Ordenar colunas na ordem desejada
+# df_hist = df_hist[['date', 'open', 'high', 'low', 'close', 'volume', 'dividends', 'stock_splits']]
 
-buffer = BytesIO()
-df_hist.to_parquet(buffer, index=True)
+# buffer = BytesIO()
+# df_hist.to_parquet(buffer, index=True)
 
-# Caminho no S3 (particionado pela data)
-parquet_path = f"historico/bitcoin/{parquet_filename}"
-buffer.seek(0)
-s3.upload_fileobj(buffer, bucket_name_raw, parquet_path)
+# # Caminho no S3 (particionado pela data)
+# parquet_path = f"historico/bitcoin/{parquet_filename}"
+# buffer.seek(0)
+# s3.upload_fileobj(buffer, bucket_name_raw, parquet_path)
 
-print(f"Upload de {parquet_filename} concluído em {parquet_path}")
+# print(f"Upload de {parquet_filename} concluído em {parquet_path}")
 
