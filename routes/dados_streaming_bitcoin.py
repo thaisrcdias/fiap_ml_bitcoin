@@ -59,8 +59,17 @@ def get_value_bitcoin() -> Response:
 
         buffer = BytesIO()
         ultimo_dado_df.to_parquet(buffer, index=True)
-        # Caminho no S3 (particionado pela data)
-        parquet_path = f"bitcoin/{parquet_filename}"
+        # Extrair ano, mês e dia da coluna 'date'
+        ultimo_dado_df['year'] = pd.to_datetime(ultimo_dado_df['date']).dt.year
+        ultimo_dado_df['month'] = pd.to_datetime(ultimo_dado_df['date']).dt.month
+        ultimo_dado_df['day'] = pd.to_datetime(ultimo_dado_df['date']).dt.day
+
+        # Caminho no S3 particionado por ano/mês/dia
+        year = ultimo_dado_df['year'].iloc[0]
+        month = ultimo_dado_df['month'].iloc[0]
+        day = ultimo_dado_df['day'].iloc[0]
+
+        parquet_path = f"bitcoin/{year}/{month}/{day}/{parquet_filename}"
         buffer.seek(0)
         s3.upload_fileobj(buffer, bucket_name_raw, parquet_path)
 
