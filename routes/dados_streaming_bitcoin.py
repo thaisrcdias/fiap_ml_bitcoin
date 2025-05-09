@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s:%(fu
 
 router = APIRouter()
 bucket_name_raw = "raw-209112358514"
-parquet_filename = f"bitcoin_{pd.Timestamp.now().strftime('%Y-%m-%d')}.parquet"
+parquet_filename = f"bitcoin_{pd.Timestamp.now().strftime('%Y-%m-%d_%H-%M')}.parquet"
 
 s3 = boto3.client(
     "s3",
@@ -23,8 +23,7 @@ s3 = boto3.client(
     region_name="us-east-1"
 )
 
-
-   
+  
 @router.get("/bitcoin_value")
 def get_value_bitcoin() -> Response:
 
