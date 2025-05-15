@@ -1,8 +1,5 @@
 requests
-fastapi
-fastapi_mcp
 streamlit
-uvicorn
 python-dotenv
 pydantic
 tavily-python
