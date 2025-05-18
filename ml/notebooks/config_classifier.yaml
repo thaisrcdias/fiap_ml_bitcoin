@@ -1,0 +1,32 @@
+bucket_name: fiap-projeto-math-refined
+generate_new_model: false
+params:
+  boosting_type: gbdt
+  class_weight: null
+  colsample_bytree: 1.0
+  importance_type: split
+  learning_rate: 0.01
+  max_depth: -1
+  min_child_samples: 20
+  min_child_weight: 0.001
+  min_split_gain: 0.0
+  n_estimators: 358
+  n_jobs: -1
+  num_leaves: 31
+  objective: binary
+  random_state: 42
+  reg_alpha: 0.0
+  reg_lambda: 0.0
+  subsample: 1.0
+  subsample_for_bin: 200000
+  subsample_freq: 0
+path_file_name: bitcoin/part-00000-a456c75c-7ccc-4db5-bd30-c4d135abc456-c000.snappy.parquet
+run_optuna: false
+run_selector: false
+vars:
+- Volume
+- log_return_1d
+- zscore_7
+- rolling_std_30
+- momentum_3d
+- rsi_14
