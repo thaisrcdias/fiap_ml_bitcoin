@@ -8,7 +8,7 @@ from fastapi import Response
 
 app = FastAPI()
 
-app.include_router(router_bitcoin)
+app.include_router(router_bitcoin.router)
 
 @app.get("/")
 async def root() -> Response:
