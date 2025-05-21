@@ -1,15 +1,14 @@
 import json
 import os
-
 import uvicorn
-from routes import dados_streaming_bitcoin
+from routes import router_bitcoin
 from fastapi import FastAPI
 from fastapi import Response
 
 
 app = FastAPI()
 
-app.include_router(dados_streaming_bitcoin.router)
+app.include_router(router_bitcoin)
 
 @app.get("/")
 async def root() -> Response:
