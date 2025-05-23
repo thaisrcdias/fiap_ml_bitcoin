@@ -6,4 +6,4 @@ class BitcoinPayload(BaseModel):
     High: float
     Low: float
     Close: float
-    Volume: float
+    Volume: int

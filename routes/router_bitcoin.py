@@ -8,6 +8,7 @@ import pandas as pd
 from io import BytesIO
 from fastapi.responses import JSONResponse
 from utils.bitcoin_payload import BitcoinPayload
+import awswrangler as wr
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s:%(funcName)s:%(message)s")
@@ -21,7 +22,7 @@ def start_glue_job(payload: BitcoinPayload):
     """
     try:
         glue_job_name = "model-bitcoin"
-        glue = boto3.client("glue")
+        glue = boto3.client("glue", region_name='us-east-1')
 
         # Passar os dados como argumentos para o Glue Job (como JSON)
         args = {
@@ -55,23 +56,16 @@ def get_bitcoin_prediction(
         year = dt.year
         month = f"{dt.month:02d}"
         day = f"{dt.day:02d}"
-
-        # Caminho do arquivo no S3 (ajuste conforme sua estrutura)
-        bucket_name = "spec-209112358514"
-        s3_key = f"bitcoin/{year}/{month}/{day}/bitcoin_{year}-{month}-{day}.parquet"
-
-        # Baixar arquivo do S3
-        s3 = boto3.client("s3")
-        buffer = BytesIO()
-        s3.download_fileobj(bucket_name, s3_key, buffer)
-        buffer.seek(0)
-
-        # Ler o arquivo Parquet
-        df = pd.read_parquet(buffer)
-
-        # Filtrar pela data/hora exata (ajuste o nome da coluna conforme seu arquivo)
-        df['data'] = pd.to_datetime(df['date'])
-        row = df[df['data'] == dt]
+        hora = f"{dt.hour:02d}"
+        minuto = f"{dt.minute:02d}"
+        boto3_session = boto3.Session(region_name="us-east-1")
+        
+        query = f"SELECT * FROM tbl_results_model where ano='{year}' and mes='{month}' and dia='{day}' and hora='{hora}' and minuto='{minuto}' "
+        print(query)
+        df = wr.athena.read_sql_query(sql=query, database="db_source_bitcoin", workgroup='workgroup_analytics', boto3_session=boto3_session)
+        
+        # df['data'] = pd.to_datetime(df['data'])
+        row = df
 
         if row.empty:
             return JSONResponse(status_code=404, content={"error": "Data não encontrada no arquivo."})
@@ -84,8 +78,7 @@ def get_bitcoin_prediction(
             "rolling_std_30": float(row.iloc[0].get("rolling_std_30", 0.0)),
             "momentum_3d": float(row.iloc[0].get("momentum_3d", 0.0)),
             "rsi_14": float(row.iloc[0].get("rsi_14", 0.0)),
-            "score": float(row.iloc[0].get("score", 0.0)),
-            "data": row.iloc[0]["data"].strftime("%Y-%m-%d %H:%M:%S")
+            "score": float(row.iloc[0].get("score", 0.0))
         }
 
         return JSONResponse(content=result)
