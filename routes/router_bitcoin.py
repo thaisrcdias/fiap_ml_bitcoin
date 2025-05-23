@@ -26,7 +26,12 @@ def start_glue_job(payload: BitcoinPayload):
 
         # Passar os dados como argumentos para o Glue Job (como JSON)
         args = {
-            '--input_data': payload.json()
+            '--Date': str(payload.Date),
+            '--Open': str(payload.Open),
+            '--High': str(payload.High),
+            '--Low': str(payload.Low),
+            '--Close': str(payload.Close),
+            '--Volume': str(payload.Volume)
         }
 
         response = glue.start_job_run(
