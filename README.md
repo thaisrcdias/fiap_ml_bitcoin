@@ -8,8 +8,14 @@ Prever, com base em dados históricos de preços e indicadores, se o preço do B
 
 ## Arquitetura
 
+Essa arquitetura em AWS foi projetada para coletar dados do Yahoo Finance (dados do Bitcoin), processá-los em tempo quase real e histórico, armazená-los e disponibilizá-los via uma API FastAPI para leitura e escrita de novos dados.
+
 ![ML Bitcoin drawio](https://github.com/user-attachments/assets/2576997f-ea48-4dbb-8428-e54eb7938816)
 
+1. Lambda - Dados Históricos: Função Lambda responsável por buscar dados a partir de 2014. Após a coleta, os dados são armazenados no bucket s3, na camada raw.
+2. Lambda - Near Real Time: Executada de forma recorrente (a cada 2 minutos via EventBridge), captura os dados mais recentes do Bitcoin e também armazena os dados brutos no bucket raw.
+3. Glue Job - refined: Job do AWS Glue (ETL) que lê os dados do bucket raw, realiza limpeza, formatação, transformação (como padronização de timestamps, remoção de duplicatas) e grava os dados no bucket refined.
+4. FastAPI (rodando no ECS) -  Para leitura dos dados enviados ou para envio de novos dados para calcular  a previsão do bitcoin.
 
 ## Estrutura do Projeto
 
