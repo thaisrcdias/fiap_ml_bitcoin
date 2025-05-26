@@ -6,6 +6,11 @@ Este projeto desenvolve um modelo de machine learning para prever se o preço do
 
 Prever, com base em dados históricos de preços e indicadores, se o preço do Bitcoin subirá pelo menos 5% em relação ao fechamento do dia anterior.
 
+## Arquitetura
+
+![ML Bitcoin drawio](https://github.com/user-attachments/assets/2576997f-ea48-4dbb-8428-e54eb7938816)
+
+
 ## Estrutura do Projeto
 
 - Desenvolvimento_Modelo-target5pct.ipynb: Notebook principal com o pipeline de desenvolvimento do modelo.
